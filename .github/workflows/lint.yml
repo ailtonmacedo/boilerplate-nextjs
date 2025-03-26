@@ -1,15 +1,15 @@
-name: Lint
+name: Code Quality
 
 on:
-  push:
-    branches: [main]
   pull_request:
+    branches: [main]
+  push:
     branches: [main]
 
 jobs:
-  lint:
+  prettier:
+    name: Prettier Check
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
@@ -19,8 +19,26 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Install Dependencies
+      - name: Instalar dependências
         run: yarn install --frozen-lockfile
 
-      - name: Run ESLint
+      - name: Checar Prettier
+        run: yarn format:check
+
+  eslint:
+    name: ESLint Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Instalar dependências
+        run: yarn install --frozen-lockfile
+
+      - name: Rodar ESLint
         run: yarn lint
